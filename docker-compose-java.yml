@@ -1,0 +1,14 @@
+version: '3'
+services:
+  java:
+    build: ./java-service
+    ports:
+      - "8081:8081"
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: localhost:24224
+    #     fluentd-async-connect: 'true'
+    #     fluentd-retry-wait: '1s'
+    #     fluentd-max-retries: '30'
+    #     tag: java.service

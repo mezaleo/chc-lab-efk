@@ -1,0 +1,50 @@
+# fluentd/conf/fluent.conf
+
+<source>
+  @type forward
+  @log_level info  
+  port 24224
+  bind 0.0.0.0
+</source>
+
+<filter java.*>
+  @type parser
+  key_name message
+  format json
+  key_name log
+  reserve_data true
+  <parse>
+    @type regexp
+    expression ^(?<timestamp>.*?)\s\| (?<level>.*?)\s\| (?<module>.*?)\s\| (?<java_tracecode>.*?)\s\| (?<package>.*?)\s\| (?<text>[^ ]*) (?<message>.*)$
+  </parse>
+</filter>
+
+<filter java.*>
+  @type parser
+  key_name message
+  format json
+  reserve_data true
+</filter>
+
+<filter java.*>
+  @type record_transformer
+  remove_keys message,log
+</filter>
+
+<match *.**>
+  @type copy
+
+  <store>
+    @type elasticsearch
+    host elasticsearch
+    port 9200
+    logstash_format true
+    logstash_prefix fluentd
+    logstash_dateformat %Y%m%d%H%M
+    include_tag_key true
+    type_name access_log
+    tag_key @log_name
+    flush_interval 1s
+  </store>
+
+</match>
