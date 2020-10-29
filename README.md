@@ -166,6 +166,3 @@ docker-compose -f docker-compose-java.yml up --build
 
 5. Acceder al puerto 5601 y revisar datos
 
-
-
-curl http://localhost:8081/v1/geografia/region/1/comuna/\[1-10\]
